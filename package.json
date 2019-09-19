@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/gulshairmalik/node-puppeteer-Scrape#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "puppeteer": "^1.20.0"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
