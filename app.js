@@ -1,6 +1,11 @@
 const express = require('express');
+const path = require('path');
 const puppeteer = require('puppeteer');
 const app = express();
+
+//Setting View Engine
+app.set('view engine', 'pug');
+app.set('views',path.join(__dirname, 'views'));
 
 const printPDF = async (addr) => {
 
@@ -18,19 +23,73 @@ const printPDF = async (addr) => {
 
     document.getElementById('search_submit').click();
     await new Promise((resolve) => setTimeout(resolve, 3000));
-    document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
+    let searchError = document.getElementById('error-modal').style.display;
+    
+    if(searchError==='' || searchError==='none'){
+      document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
+    }
+
+    // if(searchError==='block'){
+    //   console.log(searchError);
+    //   return new Promise((resolve) => {
+    //     resolve('error');
+    //   });
+    // }
   
   });
 
   await page.waitFor(5000);
+  console.log(page);
   const pdf = await page.pdf({path:"page.pdf",format:'A4'});
 
   await browser.close();
   return pdf;
+  
 
 };
 
+// (async () => {
+
+//   const browser = await puppeteer.launch({ headless: false, defaultViewport: null});
+//   const page = await browser.newPage();
+
+//   await page.goto('https://www8.miamidade.gov/Apps/PA/propertysearch/#/',{waitUntil: 'networkidle0'});
+
+//   let address = '1630';
+//   await page.focus('#search_box')
+//   await page.keyboard.type(address);
+//   let searchError = '';
+
+//   await page.evaluate(async () => {
+
+//     document.getElementById('search_submit').click();
+//     await new Promise((resolve) => setTimeout(resolve, 3000));
+//     searchError = document.getElementById('error-modal').style.display;
+//     console.log(searchError);
+//     //if(searchError==='none'){
+//       //document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
+//     //}
+  
+//   });
+
+//   // if(searchError==='none'){
+//   //   return new Promise((resolve) => {
+//   //     resolve('error');
+//   //   });
+//   // }
+
+//   //await browser.close();
+
+
+// })();
+
+
 //1630 sw 13th ave
+//Miami Dade, FL, USA.
+
+app.get('/',(req,res) => {
+  res.render('index');
+});
 
 app.get('/getPDF',async (req,res) => {
 
@@ -38,10 +97,16 @@ app.get('/getPDF',async (req,res) => {
 
   let getPDF = printPDF(address);
 
-  getPDF.then( () => {
+  getPDF.then((response) => {
     //res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdf.length });
-    //res.send(pdf)
-    res.download('./page.pdf');
+    // //res.send(pdf)
+    console.log(response);``
+    if(response==='error'){
+      res.send('Address is invalid.')
+    }
+    else{
+      res.download('./page.pdf');
+    }
   });
 
 });
@@ -54,3 +119,6 @@ app.get('/getCSV',async (req,res) => {
 
 
 app.listen(3000);
+
+
+//https://flaviocopes.com/puppeteer/
