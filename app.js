@@ -19,34 +19,51 @@ const printPDF = async (addr) => {
   await page.keyboard.type(address);
 
 
-  await page.evaluate(async () => {
+  await page.$eval('#search_submit', el => el.click());
+  await page.waitFor(1000);
+  const searchError = await page.$eval('#error-modal', el => el.style.display);
+  await page.waitFor(4000);
 
-    document.getElementById('search_submit').click();
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    let searchError = document.getElementById('error-modal').style.display;
-    
-    if(searchError==='' || searchError==='none'){
-      document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
-    }
+  if(searchError==='' || searchError==='none'){
+    await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
+  }
 
-    // if(searchError==='block'){
-    //   console.log(searchError);
-    //   return new Promise((resolve) => {
-    //     resolve('error');
-    //   });
-    // }
   
-  });
+
+
+  // await page.evaluate(async () => {
+
+  //   document.getElementById('search_submit').click();
+  //   await new Promise((resolve) => setTimeout(resolve, 3000));
+  //   let searchError = document.getElementById('error-modal').style.display;
+    
+  //   if(searchError==='' || searchError==='none'){
+  //     document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
+  //   }
+
+  //   // if(searchError==='block'){
+  //   //   console.log(searchError);
+  //   //   return new Promise((resolve) => {
+  //   //     resolve('error');
+  //   //   });
+  //   // }
+  
+  // });
+
+  if(searchError==='block'){
+    return new Promise((resolve) => {
+      resolve('error');
+    });
+  }
 
   await page.waitFor(5000);
-  console.log(page);
-  const pdf = await page.pdf({path:"page.pdf",format:'A4'});
+  const pdf = await page.pdf({format:'A4'});
 
   await browser.close();
   return pdf;
-  
 
 };
+
 
 // (async () => {
 
@@ -55,22 +72,26 @@ const printPDF = async (addr) => {
 
 //   await page.goto('https://www8.miamidade.gov/Apps/PA/propertysearch/#/',{waitUntil: 'networkidle0'});
 
-//   let address = '1630';
+//   let address = '1630 sw 13th ave';
+//   await page.waitFor(2000);
 //   await page.focus('#search_box')
 //   await page.keyboard.type(address);
-//   let searchError = '';
 
-//   await page.evaluate(async () => {
+//   await page.$eval('#search_submit', el => el.click());
+//   await page.waitFor(2000);
+//   await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
+//   // await page.evaluate(async () => {
 
-//     document.getElementById('search_submit').click();
-//     await new Promise((resolve) => setTimeout(resolve, 3000));
-//     searchError = document.getElementById('error-modal').style.display;
-//     console.log(searchError);
-//     //if(searchError==='none'){
-//       //document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
-//     //}
+//   //   document.getElementById('search_submit').click();
+//   //   await new Promise((resolve) => setTimeout(resolve, 3000));
+
+//   //   document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
   
-//   });
+//   // });
+
+//   // const searchError = await page.$eval('#error-modal', el => el.style.display);
+//   // await page.waitFor(4000);
+//   // console.log(searchError);
 
 //   // if(searchError==='none'){
 //   //   return new Promise((resolve) => {
@@ -98,14 +119,13 @@ app.get('/getPDF',async (req,res) => {
   let getPDF = printPDF(address);
 
   getPDF.then((response) => {
-    //res.set({ 'Content-Type': 'application/pdf', 'Content-Length': pdf.length });
-    // //res.send(pdf)
-    console.log(response);``
+
     if(response==='error'){
       res.send('Address is invalid.')
     }
     else{
-      res.download('./page.pdf');
+      //res.set({ 'Content-Type': 'application/pdf', 'Content-Length': response.length });
+      res.send(response);
     }
   });
 
