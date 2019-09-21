@@ -9,7 +9,13 @@ app.set('views',path.join(__dirname, 'views'));
 
 const printPDF = async (addr) => {
 
-  const browser = await puppeteer.launch({ headless: true, defaultViewport: null});
+  const browser = await puppeteer.launch({
+     headless: true, defaultViewport: null, 
+     args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ]
+});
   const page = await browser.newPage();
 
   await page.goto('https://www8.miamidade.gov/Apps/PA/propertysearch/#/',{waitUntil: 'networkidle0'});
