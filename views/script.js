@@ -11,6 +11,7 @@ function search(){
 
         if(error==='Address is invalid.'){
             document.getElementById('error').innerHTML = error;
+            document.getElementById('submit').innerText = 'Search';
         }
         else{
             let blob = new Blob([res.data], { type:'application/pdf' });
