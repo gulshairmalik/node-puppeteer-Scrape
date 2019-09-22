@@ -1,11 +1,12 @@
-function search(){
+const search = () => {
+
     document.getElementById('pdf').style.display = 'none';
     document.getElementById('csv').style.display = 'none';
     document.getElementById('error').innerHTML = '';
     document.getElementById('submit').innerText = 'Loading...';
     let searchedValue = document.getElementById('input').value;
     
-    axios.get("/getPDF?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
+    axios.get("/miami/getPDF?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
         let enc = new TextDecoder("utf-8");
         let error = enc.decode(res.data);
 
@@ -19,7 +20,7 @@ function search(){
             pdfElement.href = window.URL.createObjectURL(blob);
             pdfElement.download = 'Page.pdf';
 
-            axios.get("/getCSV",{responseType: 'arraybuffer'}).then((resp) => {
+            axios.get("/miami/getCSV",{responseType: 'arraybuffer'}).then((resp) => {
                 document.getElementById('submit').innerText = 'Search';
                 let blob = new Blob([resp.data], { type:'application/csv' });
                 let csvElement = document.getElementById('csv');
