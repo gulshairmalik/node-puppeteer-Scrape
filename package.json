@@ -18,6 +18,7 @@
   "homepage": "https://github.com/gulshairmalik/node-puppeteer-Scrape#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "node-table-to-csv": "^0.1.0",
     "pug": "^2.0.4",
     "puppeteer": "^1.20.0"
   },

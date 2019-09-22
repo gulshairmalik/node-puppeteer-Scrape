@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const puppeteer = require('puppeteer');
+const tableToCsv = require('node-table-to-csv');
+const fs = require('fs');
 const app = express();
 
 //Setting View Engine
@@ -28,33 +30,12 @@ const printPDF = async (addr) => {
   await page.$eval('#search_submit', el => el.click());
   await page.waitFor(1000);
   const searchError = await page.$eval('#error-modal', el => el.style.display);
-  await page.waitFor(4000);
+  await page.waitFor(2000);
 
   if(searchError==='' || searchError==='none'){
     await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
   }
 
-  
-
-
-  // await page.evaluate(async () => {
-
-  //   document.getElementById('search_submit').click();
-  //   await new Promise((resolve) => setTimeout(resolve, 3000));
-  //   let searchError = document.getElementById('error-modal').style.display;
-    
-  //   if(searchError==='' || searchError==='none'){
-  //     document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
-  //   }
-
-  //   // if(searchError==='block'){
-  //   //   console.log(searchError);
-  //   //   return new Promise((resolve) => {
-  //   //     resolve('error');
-  //   //   });
-  //   // }
-  
-  // });
 
   if(searchError==='block'){
     return new Promise((resolve) => {
@@ -62,8 +43,19 @@ const printPDF = async (addr) => {
     });
   }
 
-  await page.waitFor(5000);
+  await page.waitFor(3000);
   const pdf = await page.pdf({format:'A4'});
+  const html = await page.$eval('body',el => el.innerHTML);
+  
+  await page.waitFor(1000);
+  const csv = tableToCsv(html);
+
+  fs.writeFile("Page.csv", csv, (err) => {
+    if(err) {
+        return console.log(err);
+    }
+  }); 
+
 
   await browser.close();
   return pdf;
@@ -86,24 +78,25 @@ const printPDF = async (addr) => {
 //   await page.$eval('#search_submit', el => el.click());
 //   await page.waitFor(2000);
 //   await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
-//   // await page.evaluate(async () => {
 
-//   //   document.getElementById('search_submit').click();
-//   //   await new Promise((resolve) => setTimeout(resolve, 3000));
+//   await page.waitFor(5000);
+//   //const html = await page.content();
+//   const html = await page.$eval('body',el => el.innerHTML);
+//   await page.waitFor(2000);
 
-//   //   document.querySelectorAll("#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span")[0].click();
-  
-//   // });
 
-//   // const searchError = await page.$eval('#error-modal', el => el.style.display);
-//   // await page.waitFor(4000);
-//   // console.log(searchError);
+//   let csv = tableToCsv(html);
+//   console.log(csv);
 
-//   // if(searchError==='none'){
-//   //   return new Promise((resolve) => {
-//   //     resolve('error');
-//   //   });
-//   // }
+//   fs.writeFile("index.csv", csv, function(err) {
+//     if(err) {
+//         return console.log(err);
+//     }
+
+//     console.log("The file was saved!");
+//   }); 
+
+
 
 //   //await browser.close();
 
@@ -118,7 +111,7 @@ app.get('/',(req,res) => {
   res.render('index');
 });
 
-app.get('/getPDF',async (req,res) => {
+app.get('/getPDF',(req,res) => {
 
   let address = req.query.address;
 
@@ -137,14 +130,12 @@ app.get('/getPDF',async (req,res) => {
 
 });
 
-app.get('/getCSV',async (req,res) => {
+app.get('/getCSV',(req,res) => {
 
-  let address = req.query.address;
+  res.download('./Page.csv');
 
 });
 
 
 app.listen(process.env.PORT || 3000);
 
-
-//https://flaviocopes.com/puppeteer/
