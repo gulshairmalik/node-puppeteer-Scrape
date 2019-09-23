@@ -11,18 +11,37 @@ html(lang="en")
         .container
             .jumbotron
                 h1.text-center Web Scrapper
-            form.form-inline(action='javascript:search()')
-                .form-group
-                    input#input.form-control(type='text' placeholder="Search Address in Miami" required)
-
-                button#submit.btn.btn-default(type='submit') Search
-            span#error.text-danger
-            br
+            
             .row
-                .col-sm-2
-                    a#pdf.btn.btn-primary(href="#",style="display:none") Get PDF
-                .col-sm-2
-                    a#csv.btn.btn-primary(href="#",style="display:none") Get CSV
+                .col-md-6
+                    label(for="form") Search in Miami:
+                    form.form-inline(action='javascript:searchInMiami()' name='form')
+                        .form-group
+                            input#input.form-control(type='text' placeholder="Search Address in Miami" required)
+
+                            button#submit.btn.btn-default(type='submit') Search
+                    span#error.text-danger
+                    br
+                    .row
+                        .col-sm-3
+                            a#pdf.btn.btn-primary(href="#",style="display:none") Get PDF
+                        .col-sm-3
+                            a#csv.btn.btn-primary(href="#",style="display:none") Get CSV
+                
+                .col-md-6
+                    label(for="form1") Search in Palm:
+                    form.form-inline(action='javascript:searchInPalm()' name='form1')
+                        .form-group
+                            input#input1.form-control(type='text' placeholder="Search Address in Palm" required)
+
+                            button#submit1.btn.btn-default(type='submit') Search
+                    span#error1.text-danger
+                    br
+                    .row
+                        .col-sm-3
+                            a#pdf1.btn.btn-primary(href="#",style="display:none") Get PDF
+                        .col-sm-3
+                            a#csv1.btn.btn-primary(href="#",style="display:none") Get CSV
         script
             include ./script.js
             
