@@ -65,58 +65,60 @@ app.set('views',path.join(__dirname, 'views'));
 
 
 
-// (async () => {
+(async () => {
 
-//   const browser = await puppeteer.launch({ headless: false, defaultViewport: null});
-//   const page = await browser.newPage();
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: null});
+  const page = await browser.newPage();
 
-//   await page.goto('https://www.pbcgov.org/papa/Asps/GeneralAdvSrch/MasterSearch.aspx',{waitUntil: 'networkidle0'});
+  await page.goto('https://pbctax.manatron.com/Tabs/PropertyTax.aspx',{waitUntil: 'networkidle0'});
 
 
-//   let address = '815 upland rd 1';
-//   await page.waitFor(3000);
-//   await page.focus('#txtSearch');
-//   await page.keyboard.type(address);
-//   //await page.waitFor(2000);
+  let address = '815 upland rd 1';
+  await page.waitFor(2000);
+  await page.$eval('#selSearchBy', el => el.selectedIndex = 4);
+  await page.focus('#fldInput');
+  await page.keyboard.type(address);
+  //await page.waitFor(2000);
 
-//   await page.$eval('#form2 > div.mainsearch > div.searchbararea > div > button', el => el.click());
-//   await page.waitFor(2000);
-//   // await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
-//   let errorElement = '';
-//   try {
-//     errorElement = await page.$eval('#MainContent_lblMsg',el => el.innerHTML);
-//   } catch (error) {
-//   }
+  await page.$eval('#btnsearch', el => el.click());
+  await page.waitFor(2000);
+  // await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
+  let errorElement = '';
+  try {
+    errorElement = await page.$eval('#lxT504 > p.Normal',el => el.innerHTML);
+  } catch (error) {
+  }
 //   console.log(errorElement);
   
-//   // await page.waitFor(5000);
-//   // const html = await page.$eval('body',el => el.innerHTML);
-//   // await page.waitFor(2000);
-//   //await page.pdf({path:'Page.pdf',format:'A4'});
+  // await page.waitFor(5000);
+  const html = await page.$eval('#lxT504',el => el.innerHTML);
+  // await page.waitFor(2000);
+  //await page.pdf({path:'Page.pdf',format:'A4'});
 
-//   // let csv = tableToCsv(html);
-//   // console.log(csv);
+  // let csv = tableToCsv(html);
+  // console.log(csv);
 
-//   // fs.writeFile("index.csv", csv, function(err) {
-//   //   if(err) {
-//   //       return console.log(err);
-//   //   }
+  // fs.writeFile("index.csv", csv, function(err) {
+  //   if(err) {
+  //       return console.log(err);
+  //   }
 
-//   //   console.log("The file was saved!");
-//   // }); 
-
-
-
-//   //await browser.close();
+  //   console.log("The file was saved!");
+  // }); 
 
 
-// })();
+
+  //await browser.close();
+
+
+})();
 
 
 
 //1630 sw 13th ave
 //815 upland rd 1
 //713 Sunset Rd
+//795 Belvedere Rd
 
 app.listen(process.env.PORT || 3000);
 
