@@ -42,6 +42,18 @@ html(lang="en")
                             a#pdf1.btn.btn-primary(href="#",style="display:none") Get PDF
                         .col-sm-3
                             a#csv1.btn.btn-primary(href="#",style="display:none") Get CSV
+                    br
+                    button#getTax.btn.btn-success(onclick="javascript:searchTaxInPalm()",style="display:none") Search For Tax
+                    span#error2.text-danger                    
+            
+                    #tax(style="display:none") 
+                        label Property Tax Information:
+                        br
+                        .row
+                            .col-sm-3
+                                a#pdf2.btn.btn-primary(href="#") Get PDF
+                            .col-sm-3
+                                a#csv2.btn.btn-primary(href="#") Get CSV
         script
             include ./script.js
             
