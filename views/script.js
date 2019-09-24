@@ -98,7 +98,27 @@ const searchTaxInPalm = () => {
                 csvElement.href = window.URL.createObjectURL(blob);
                 csvElement.download = 'Tax.csv';
                 document.getElementById('tax').style.display = 'block';
+                document.getElementById('get3Tax').style.display = 'block';
             })
         }
+    });
+}
+
+const searchTaxBillInPalm = () => {
+
+    document.getElementById('taxBill').style.display = 'none';
+    document.getElementById('get3Tax').innerText = 'Loading...';
+
+    let searchedValue = document.getElementById('input1').value;
+    
+    axios.get("/palm/getTaxBills?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
+        
+        let blob = new Blob([res.data], { type:'application/zip' });
+        let csvElement = document.getElementById('csvTax');
+        csvElement.href = window.URL.createObjectURL(blob);
+        csvElement.download = 'TaxBills.zip';
+        document.getElementById('getTax').style.display = 'none';
+        document.getElementById('taxBill').style.display = 'block';
+        
     });
 }

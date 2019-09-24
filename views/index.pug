@@ -44,16 +44,24 @@ html(lang="en")
                             a#csv1.btn.btn-primary(href="#",style="display:none") Get CSV
                     br
                     button#getTax.btn.btn-success(onclick="javascript:searchTaxInPalm()",style="display:none") Search For Tax
-                    span#error2.text-danger                    
+                    span#error2.text-danger                 
             
                     #tax(style="display:none") 
                         label Property Tax Information:
-                        br
                         .row
                             .col-sm-3
                                 a#pdf2.btn.btn-primary(href="#") Get PDF
                             .col-sm-3
                                 a#csv2.btn.btn-primary(href="#") Get CSV
+                    br
+                    button#get3Tax.btn.btn-success(onclick="javascript:searchTaxBillInPalm()",style="display:none") Get Tax Bills
+                
+                    #taxBill(style="display:none") 
+                        label Last Three Tax Bills:
+                        .row
+                            .col-sm-3
+                                a#csvTax.btn.btn-primary(href="#") Get Bills CSV
+                           
         script
             include ./script.js
             
