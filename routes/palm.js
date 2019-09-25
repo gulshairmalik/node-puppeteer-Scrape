@@ -16,7 +16,7 @@ router.get('/getTaxPDF',PalmController.getTaxPDF);
 //Get Request to '/palm/getTaxCSV'
 router.get('/getTaxCSV',PalmController.getTaxCSV);
 
-//Get Request to '/palm/getTaxBills'
+//Get Request to '/palm/getTaxBill1'
 router.get('/getTaxBills',PalmController.getTaxBills);
 
 //Exporting Router Object to server

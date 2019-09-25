@@ -112,11 +112,11 @@ const searchTaxBillInPalm = () => {
     let searchedValue = document.getElementById('input1').value;
     
     axios.get("/palm/getTaxBills?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
-        
-        let blob = new Blob([res.data], { type:'application/zip' });
+        document.getElementById('get3Tax').style.display = 'none';
+        let blob = new Blob([res.data], { type:'application/csv' });
         let csvElement = document.getElementById('csvTax');
         csvElement.href = window.URL.createObjectURL(blob);
-        csvElement.download = 'TaxBills.zip';
+        csvElement.download = 'TaxBills.csv';
         document.getElementById('getTax').style.display = 'none';
         document.getElementById('taxBill').style.display = 'block';
         

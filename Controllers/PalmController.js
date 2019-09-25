@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 const tableToCsv = require('node-table-to-csv');
-const EasyZip = require('easy-zip2').EasyZip;
 const fs = require('fs');
 
 exports.getPDF = (req,res) => {
@@ -57,12 +56,9 @@ exports.getTaxBills = (req,res) => {
 
   let address = req.query.address;
 
-  printTaxBills(address).then(resp => {
-
-    console.log('sad');
-    
-    if(resp.data){
-     console.log('hello');
+  printTaxBills(address).then((resp) => {
+    if(resp==='success'){
+      res.download('./TaxBills.csv');
     }
     
   });
@@ -217,29 +213,41 @@ const printPDF = async (addr) => {
 
     const newPage = await browser.newPage();
 
+    let wholeCsv = '';
+
     for(let i=0; i<arrOfLinks.length; i++){
 
       await newPage.goto(arrOfLinks[i],{waitUntil: 'networkidle0'});
       await newPage.waitFor(2000);
-      let html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
+      let html = await newPage.$eval('#dnn_ContentPane',el => el.innerHTML);
       await newPage.waitFor(1000);
       let csv = tableToCsv(html);
+      wholeCsv += csv;
 
-      fs.writeFile("TaxBill"+(i+1)+".csv", csv, async (err) => {
-        if(err) {
-            return console.log(err);
-        }
-        else{
-          if(i===arrOfLinks.length-1){
-            await browser.close();
-            return new Promise((resolve) => {
-              resolve(true);
-            });
+      // fs.writeFile("TaxBill"+(i+1)+".csv", csv, async (err) => {
+      //   if(err) {
+      //       return console.log(err);
+      //   }
+      //   else{
+          
+      //   }
+      // }); 
+
+      if(i===arrOfLinks.length-1){
+        fs.writeFile("TaxBills.csv", wholeCsv, (err) => {
+          if(err) {
+              return console.log(err);
           }
-        }
-      }); 
+        });
+      }
 
     }
+
+    await browser.close();
+
+    return new Promise(resolve => {
+      resolve('success');
+    })
   
   };
   
