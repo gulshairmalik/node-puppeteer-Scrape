@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const tableToCsv = require('node-table-to-csv');
-const zip = require('express-zip');
+const EasyZip = require('easy-zip2').EasyZip;
 const fs = require('fs');
 
 exports.getPDF = (req,res) => {
@@ -58,13 +58,11 @@ exports.getTaxBills = (req,res) => {
   let address = req.query.address;
 
   printTaxBills(address).then(resp => {
+
+    console.log('sad');
     
     if(resp.data){
-      res.zip([
-        { path: '/TaxBill1.csv', name: 'TaxBill1' },
-        { path: '/TaxBill2.csv', name: 'TaxBill2' },
-        { path: '/TaxBill3.csv', name: 'TaxBill3' }
-      ]);
+     console.log('hello');
     }
     
   });
@@ -163,7 +161,7 @@ const printPDF = async (addr) => {
     
     await page.waitFor(2000);
     await page.$eval('#grm-search > tbody > tr:nth-child(2) > td.ui-widget.ui-widget-content.no-vert-lines.c8 > a', el => el.click());
-    await page.waitFor(4000);
+    await page.waitFor(5000);
     const pdf = await page.pdf({format:'A4'});
     const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
     
@@ -206,7 +204,7 @@ const printPDF = async (addr) => {
     await page.waitFor(3000);
   
     await page.$eval('#grm-search > tbody > tr:nth-child(2) > td.ui-widget.ui-widget-content.no-vert-lines.c8 > a', el => el.click());
-    await page.waitFor(2000);
+    await page.waitFor(5000);
 
 
     const linkToFirstTax = "https://pbctax.manatron.com"+ await page.$eval("#\\35 08 > table > tbody > tr:nth-child(1) > td:nth-child(1) > a", el => el.getAttribute('href'));
@@ -214,33 +212,34 @@ const printPDF = async (addr) => {
     const linkToThirdTax = "https://pbctax.manatron.com"+ await page.$eval("#\\35 08 > table > tbody > tr:nth-child(3) > td:nth-child(1) > a", el => el.getAttribute('href'));
 
     await page.waitFor(1000);
-    
-    let response1 = await axios.get(linkToFirstTax);
-    let html1 = await response1.data;
-    let response2 = await axios.get(linkToSecondTax);
-    let html2 = await response2.data;
-    let response3 = await axios.get(linkToThirdTax);
-    let html3 = await response3.data;
-    
-    await page.waitFor(2000);
 
-    let CSVs = [
-      tableToCsv(html1),
-      tableToCsv(html2),
-      tableToCsv(html3)
-    ];
-  
-    for(let i=0; i<CSVs.length; i++){
-      fs.writeFile("TaxBill"+(i+1)+".csv", CSVs[i], (err) => {
+    const arrOfLinks = [linkToFirstTax,linkToSecondTax,linkToThirdTax];
+
+    const newPage = await browser.newPage();
+
+    for(let i=0; i<arrOfLinks.length; i++){
+
+      await newPage.goto(arrOfLinks[i],{waitUntil: 'networkidle0'});
+      await newPage.waitFor(2000);
+      let html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
+      await newPage.waitFor(1000);
+      let csv = tableToCsv(html);
+
+      fs.writeFile("TaxBill"+(i+1)+".csv", csv, async (err) => {
         if(err) {
             return console.log(err);
         }
+        else{
+          if(i===arrOfLinks.length-1){
+            await browser.close();
+            return new Promise((resolve) => {
+              resolve(true);
+            });
+          }
+        }
       }); 
+
     }
-  
-  
-    await browser.close();
-    return true;
   
   };
   
