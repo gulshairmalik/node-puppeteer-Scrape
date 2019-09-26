@@ -111,14 +111,42 @@ const searchTaxBillInPalm = () => {
 
     let searchedValue = document.getElementById('input1').value;
     
-    axios.get("/palm/getTaxBills?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
-        document.getElementById('get3Tax').style.display = 'none';
-        let blob = new Blob([res.data], { type:'application/csv' });
-        let csvElement = document.getElementById('csvTax');
-        csvElement.href = window.URL.createObjectURL(blob);
-        csvElement.download = 'TaxBills.csv';
-        document.getElementById('getTax').style.display = 'none';
-        document.getElementById('taxBill').style.display = 'block';
+    axios.get("/palm/getTaxBills?address="+searchedValue).then((res) => {
+
+        let arrOfLinks = res.data;
+
+        axios.get("/palm/getTaxBill1?pageAddress="+encodeURIComponent(arrOfLinks[0]),{responseType: 'arraybuffer'}).then((res1) => {
+
+            let blob1 = new Blob([res1.data], { type:'application/csv' });
+            let csvElement1 = document.getElementById('csvTax1');
+            csvElement1.href = window.URL.createObjectURL(blob1);
+            csvElement1.download = 'TaxBill1.csv';
+   
+
+            axios.get("/palm/getTaxBill2?pageAddress="+encodeURIComponent(arrOfLinks[1]),{responseType: 'arraybuffer'}).then((res2) => {
+
+                let blob2 = new Blob([res2.data], { type:'application/csv' });
+                let csvElement2 = document.getElementById('csvTax2');
+                csvElement2.href = window.URL.createObjectURL(blob2);
+                csvElement2.download = 'TaxBill2.csv';
+
+                axios.get("/palm/getTaxBill3?pageAddress="+encodeURIComponent(arrOfLinks[2]),{responseType: 'arraybuffer'}).then((res3) => {
+
+                    document.getElementById('get3Tax').style.display = 'none';
+                    
+                    let blob3 = new Blob([res3.data], { type:'application/csv' });
+                    let csvElement3 = document.getElementById('csvTax3');
+                    csvElement3.href = window.URL.createObjectURL(blob3);
+                    csvElement3.download = 'TaxBill3.csv';
+
+                    document.getElementById('taxBill').style.display = 'block';
+      
+                });
+                
+            });
+            
+        });
+
         
     });
 }

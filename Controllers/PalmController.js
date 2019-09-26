@@ -57,8 +57,48 @@ exports.getTaxBills = (req,res) => {
   let address = req.query.address;
 
   printTaxBills(address).then((resp) => {
+    if(resp){
+      res.send(resp);
+    }
+    
+  });
+
+}
+
+exports.getTaxBill1 = (req,res) => {
+
+  let address = req.query.pageAddress;
+
+  printTaxBill1(address).then((resp) => {
     if(resp==='success'){
-      res.download('./TaxBills.csv');
+      res.download('./TaxBill1.csv');
+    }
+    
+  });
+
+
+}
+
+exports.getTaxBill2 = (req,res) => {
+
+  let address = req.query.pageAddress;
+
+  printTaxBill2(address).then((resp) => {
+    if(resp==='success'){
+      res.download('./TaxBill2.csv');
+    }
+    
+  });
+
+}
+
+exports.getTaxBill3 = (req,res) => {
+
+  let address = req.query.pageAddress;
+
+  printTaxBill3(address).then((resp) => {
+    if(resp==='success'){
+      res.download('./TaxBill3.csv');
     }
     
   });
@@ -211,38 +251,73 @@ const printPDF = async (addr) => {
 
     const arrOfLinks = [linkToFirstTax,linkToSecondTax,linkToThirdTax];
 
-    const newPage = await browser.newPage();
+    // const newPage = await browser.newPage();
 
-    let wholeCsv = '';
+    // let wholeCsv = '';
 
-    for(let i=0; i<arrOfLinks.length; i++){
+    // for(let i=0; i<arrOfLinks.length; i++){
 
-      await newPage.goto(arrOfLinks[i],{waitUntil: 'networkidle0'});
-      await newPage.waitFor(2000);
-      let html = await newPage.$eval('#dnn_ContentPane',el => el.innerHTML);
-      await newPage.waitFor(1000);
-      let csv = tableToCsv(html);
-      wholeCsv += csv;
+    //   await newPage.goto(arrOfLinks[i],{waitUntil: 'networkidle0'});
+    //   await newPage.waitFor(2000);
+    //   let html = await newPage.$eval('#dnn_ContentPane',el => el.innerHTML);
+    //   await newPage.waitFor(1000);
+    //   let csv = tableToCsv(html);
+    //   wholeCsv += csv;
 
-      // fs.writeFile("TaxBill"+(i+1)+".csv", csv, async (err) => {
-      //   if(err) {
-      //       return console.log(err);
-      //   }
-      //   else{
+    //   // fs.writeFile("TaxBill"+(i+1)+".csv", csv, async (err) => {
+    //   //   if(err) {
+    //   //       return console.log(err);
+    //   //   }
+    //   //   else{
           
-      //   }
-      // }); 
+    //   //   }
+    //   // }); 
 
-      if(i===arrOfLinks.length-1){
-        fs.writeFile("TaxBills.csv", wholeCsv, (err) => {
-          if(err) {
-              return console.log(err);
-          }
-        });
+    //   if(i===arrOfLinks.length-1){
+    //     fs.writeFile("TaxBills.csv", wholeCsv, (err) => {
+    //       if(err) {
+    //           return console.log(err);
+    //       }
+    //     });
+    //   }
+
+    // }
+
+    await browser.close();
+
+    return new Promise(resolve => {
+      resolve(arrOfLinks);
+    })
+  
+  };
+  
+
+
+
+  const printTaxBill1 = async (pageAddr) => {
+
+    const browser = await puppeteer.launch({
+       headless: true, defaultViewport: null, 
+       args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ]
+    });
+    const page = await browser.newPage();
+  
+    await page.goto(pageAddr,{waitUntil: 'networkidle0'});
+    await page.waitFor(4000);
+    const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
+    await page.waitFor(1000);
+    
+    const csv = tableToCsv(html);
+  
+    fs.writeFile("TaxBill1.csv", csv, (err) => {
+      if(err) {
+          return console.log(err);
       }
-
-    }
-
+    }); 
+  
     await browser.close();
 
     return new Promise(resolve => {
@@ -250,4 +325,69 @@ const printPDF = async (addr) => {
     })
   
   };
+
+
+  const printTaxBill2 = async (pageAddr) => {
+
+    const browser = await puppeteer.launch({
+       headless: true, defaultViewport: null, 
+       args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ]
+    });
+    const page = await browser.newPage();
   
+    await page.goto(pageAddr,{waitUntil: 'networkidle0'});
+    await page.waitFor(4000);
+    const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
+    await page.waitFor(1000);
+    
+    const csv = tableToCsv(html);
+  
+    fs.writeFile("TaxBill2.csv", csv, (err) => {
+      if(err) {
+          return console.log(err);
+      }
+    }); 
+  
+    await browser.close();
+
+    return new Promise(resolve => {
+      resolve('success');
+    })
+  
+  };
+
+
+  const printTaxBill3 = async (pageAddr) => {
+
+    const browser = await puppeteer.launch({
+       headless: true, defaultViewport: null, 
+       args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ]
+    });
+    const page = await browser.newPage();
+  
+    await page.goto(pageAddr,{waitUntil: 'networkidle0'});
+    await page.waitFor(4000);
+    const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
+    await page.waitFor(1000);
+    
+    const csv = tableToCsv(html);
+  
+    fs.writeFile("TaxBill3.csv", csv, (err) => {
+      if(err) {
+          return console.log(err);
+      }
+    }); 
+  
+    await browser.close();
+
+    return new Promise(resolve => {
+      resolve('success');
+    })
+  
+  };
