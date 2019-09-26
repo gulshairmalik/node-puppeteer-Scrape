@@ -1,2 +1,2 @@
 # Web Scrapping with Node Puppeteer
-A small project to scrape the data from a website using Node.js.
+A project to scrape the data from different websites using Node.js.
