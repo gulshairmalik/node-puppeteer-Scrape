@@ -240,7 +240,9 @@ const printPDF = async (addr) => {
     await page.waitFor(3000);
   
     await page.$eval('#grm-search > tbody > tr:nth-child(2) > td.ui-widget.ui-widget-content.no-vert-lines.c8 > a', el => el.click());
-    await page.waitFor(5000);
+    await page.waitFor(4000);
+
+    await page.waitForSelector('#\\35 08 > table > tbody > tr:nth-child(1) > td:nth-child(1) > a');
 
 
     const linkToFirstTax = "https://pbctax.manatron.com"+ await page.$eval("#\\35 08 > table > tbody > tr:nth-child(1) > td:nth-child(1) > a", el => el.getAttribute('href'));
