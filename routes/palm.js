@@ -28,5 +28,8 @@ router.get('/getTaxBill2',PalmController.getTaxBill2);
 //Get Request to '/palm/getTaxBill3'
 router.get('/getTaxBill3',PalmController.getTaxBill3);
 
+//Get Request to '/palm/getAssesment'
+router.get('/getAssesment',PalmController.getAssesment);
+
 //Exporting Router Object to server
 module.exports = router;

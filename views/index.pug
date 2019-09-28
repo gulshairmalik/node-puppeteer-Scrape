@@ -65,6 +65,15 @@ html(lang="en")
                                 a#csvTax2.btn.btn-primary(href="#") Get Bill2 CSV
                             .col-sm-3
                                 a#csvTax3.btn.btn-primary(href="#") Get Bill3 CSV
+                    br
+                    button#getAssesment.btn.btn-success(onclick="javascript:searchAssesmentInPalm()",style="display:none") Get Special Assesment
+                
+                    #assesment(style="display:none") 
+                        label Special Assesment:
+                        .row
+                            .col-sm-4
+                                a#assesPdf.btn.btn-primary(href="#") Get Assesment PDF
+                        
                            
         script
             include ./script.js

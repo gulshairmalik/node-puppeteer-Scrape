@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const tableToCsv = require('node-table-to-csv');
+const axios = require('axios');
 const fs = require('fs');
 
 exports.getPDF = (req,res) => {
@@ -104,6 +105,23 @@ exports.getTaxBill3 = (req,res) => {
   });
 
 }
+
+exports.getAssesment = (req,res) => {
+
+  let address = req.query.address;
+
+  let getPDF = printAssesment(address);
+
+  getPDF.then((resp) => {
+    if(resp==='success'){
+      res.download('./Assesment.pdf');
+    }
+  });
+
+}
+
+
+
 
 const printPDF = async (addr) => {
 
@@ -253,38 +271,6 @@ const printPDF = async (addr) => {
 
     const arrOfLinks = [linkToFirstTax,linkToSecondTax,linkToThirdTax];
 
-    // const newPage = await browser.newPage();
-
-    // let wholeCsv = '';
-
-    // for(let i=0; i<arrOfLinks.length; i++){
-
-    //   await newPage.goto(arrOfLinks[i],{waitUntil: 'networkidle0'});
-    //   await newPage.waitFor(2000);
-    //   let html = await newPage.$eval('#dnn_ContentPane',el => el.innerHTML);
-    //   await newPage.waitFor(1000);
-    //   let csv = tableToCsv(html);
-    //   wholeCsv += csv;
-
-    //   // fs.writeFile("TaxBill"+(i+1)+".csv", csv, async (err) => {
-    //   //   if(err) {
-    //   //       return console.log(err);
-    //   //   }
-    //   //   else{
-          
-    //   //   }
-    //   // }); 
-
-    //   if(i===arrOfLinks.length-1){
-    //     fs.writeFile("TaxBills.csv", wholeCsv, (err) => {
-    //       if(err) {
-    //           return console.log(err);
-    //       }
-    //     });
-    //   }
-
-    // }
-
     await browser.close();
 
     return new Promise(resolve => {
@@ -386,6 +372,84 @@ const printPDF = async (addr) => {
       }
     }); 
   
+    await browser.close();
+
+    return new Promise(resolve => {
+      resolve('success');
+    })
+  
+  };
+
+
+
+  const printAssesment = async (addr) => {
+
+    const browser = await puppeteer.launch({
+       headless: true, defaultViewport: null, 
+       args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ]
+    });
+    const page = await browser.newPage();
+  
+    await page.goto('https://secure.co.palm-beach.fl.us/ClerkFSAPA/Disclaimer',{waitUntil: 'networkidle0'});
+
+    let address = addr;
+    await page.waitFor(1000);
+    await page.$eval('#MainContent_imgAccept', el => el.click());
+    await page.waitFor(1000);
+    await page.waitForSelector('#MainContent_txtSitusAddress');
+    await page.focus('#MainContent_txtSitusAddress');
+    await page.keyboard.type(address);
+    await page.waitFor(2000);
+  
+    await page.$eval('#btnSeacrh', el => el.click());
+    await page.waitFor(2000);
+    
+    let errorElement = '';
+    try {
+      errorElement = await page.$eval('#MainContent_lblBottomMessage',el => el.innerHTML);
+    } catch (error) {
+    }
+
+    await page.waitFor(2000);
+
+    if(errorElement!==''){
+
+      await page.pdf({path:'./Assesment.pdf',format:'A4'});
+      await page.waitFor(3000);
+      await browser.close();
+      return new Promise(resolve => {
+        resolve('success');
+      })
+
+    }
+
+    await page.$eval('#MainContent_grdAccounts_hyperAcctseq_0', el => el.click());
+
+    //https://secure.co.palm-beach.fl.us/ClerkFSAPA/LienSatisfactionLttr.aspx?acctseq=rJYyDqMbwuvBEPtWQMFJrQ==
+
+    await page.waitFor(2000);
+
+    const url = await page.url();
+  
+    await page.waitFor(1000);
+    
+    const pdfUrl = url.replace('AccountDetail','LienSatisfactionLttr.aspx');
+  
+    await page.waitFor(1000);
+
+    const response = await axios.get(pdfUrl,{responseType: 'arraybuffer'});
+    const pdf = await response.data;
+
+    fs.writeFile("Assesment.pdf", pdf, (err) => {
+      if(err) {
+          return console.log(err);
+      }
+    }); 
+
+    await page.waitFor(2000);
     await browser.close();
 
     return new Promise(resolve => {

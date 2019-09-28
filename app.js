@@ -70,58 +70,57 @@ app.set('views',path.join(__dirname, 'views'));
 // (async () => {
 
 //   const browser = await puppeteer.launch({ headless: false, defaultViewport: null});
+
 //   const page = await browser.newPage();
 
-//   await page.goto('https://pbctax.manatron.com/Tabs/PropertyTax.aspx',{waitUntil: 'networkidle0'});
+//   await page.goto('https://secure.co.palm-beach.fl.us/ClerkFSAPA/Disclaimer',{waitUntil: 'networkidle0'});
 
 
-//   let address = '815 upland rd 1';
-//   await page.waitFor(2000);
-//   await page.$eval('#selSearchBy', el => el.selectedIndex = 4);
-//   await page.focus('#fldInput');
+//   let address = '17795 35TH PL N';
+//   await page.waitFor(1000);
+//   await page.$eval('#MainContent_imgAccept', el => el.click());
+//   await page.waitFor(1000);
+//   await page.waitForSelector('#MainContent_txtSitusAddress');
+//   await page.focus('#MainContent_txtSitusAddress');
 //   await page.keyboard.type(address);
-//   //await page.waitFor(2000);
-
-//   await page.$eval('#btnsearch', el => el.click());
 //   await page.waitFor(2000);
-//   // await page.$eval('#results_list > div > div.results_record.ng-scope > div.record_folio.ng-binding > span', el => el.click());
+
+//   await page.$eval('#btnSeacrh', el => el.click());
+//   await page.waitFor(2000);
+  
 //   let errorElement = '';
 //   try {
-//     errorElement = await page.$eval('#lxT504 > p.Normal',el => el.innerHTML);
+//     errorElement = await page.$eval('#MainContent_lblBottomMessage',el => el.innerHTML);
 //   } catch (error) {
 //   }
-//   await page.waitFor(3000);
 
-//   await page.$eval('#grm-search > tbody > tr:nth-child(2) > td.ui-widget.ui-widget-content.no-vert-lines.c8 > a', el => el.click());
+//   await page.waitFor(2000);
+
+//   await page.$eval('#MainContent_grdAccounts_hyperAcctseq_0', el => el.click());
+
+//   await page.waitFor(2000);
+
+//   const url = await page.url();
+
+//   await page.waitFor(1000);
   
-//   await page.waitFor(10000);
-//   const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
-//   // await page.waitFor(2000);
+//   const pdfUrl = url.replace('AccountDetail','LienSatisfactionLttr.aspx');
+
+//   await page.waitFor(1000);
+
+//   axios.get(pdfUrl,{responseType: 'arraybuffer'}).then(res => {
+//     fs.writeFile("Asses.pdf", res.data, (err) => {
+//         if(err) {
+//             return console.log(err);
+//         }
+//       });
+//   })
+
+//   //console.log(pdf);
+
+//   //https://secure.co.palm-beach.fl.us/ClerkFSAPA/LienSatisfactionLttr.aspx?acctseq=rJYyDqMbwuvBEPtWQMFJrQ==
+
 //   //await page.pdf({path:'Page.pdf',format:'A4'});
-
-//   // let csv = tableToCsv(html);
-//   let csv = '';
-//   // console.log(csv);
-
-//   // fs.writeFile("index.csv", csv, function(err) {
-//   //   if(err) {
-//   //       return console.log(err);
-//   //   }
-
-//   //   console.log("The file was saved!");
-//   // }); 
-
-// const linkToFirstTax = "https://pbctax.manatron.com"+ await page.$eval("#\\35 08 > table > tbody > tr:nth-child(1) > td:nth-child(1) > a", el => el.getAttribute('href'));
-// // const linkToSecondTax = "https://pbctax.manatron.com"+ await page.$eval("#\\35 08 > table > tbody > tr:nth-child(2) > td:nth-child(1) > a", el => el.getAttribute('href'));
-// // const linkToThirdTax = "https://pbctax.manatron.com"+ await page.$eval("#\\35 08 > table > tbody > tr:nth-child(3) > td:nth-child(1) > a", el => el.getAttribute('href'));
-
-// await page.waitFor(1000);
-// let response = await axios.get(linkToFirstTax);
-// let html1 = await response.data;
-// await page.waitFor(1000);
-// console.log(html1);
-
-
 
 
 //   //await browser.close();
@@ -132,7 +131,7 @@ app.set('views',path.join(__dirname, 'views'));
 
 
 //1630 sw 13th ave
-//815 upland rd 1
+//815 upland rd 
 //713 Sunset Rd
 //795 Belvedere Rd
 

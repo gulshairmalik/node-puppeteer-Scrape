@@ -140,6 +140,7 @@ const searchTaxBillInPalm = () => {
                     csvElement3.download = 'TaxBill3.csv';
 
                     document.getElementById('taxBill').style.display = 'block';
+                    document.getElementById('getAssesment').style.display = 'block';
       
                 });
                 
@@ -148,5 +149,24 @@ const searchTaxBillInPalm = () => {
         });
 
         
+    });
+}
+
+
+const searchAssesmentInPalm = () => {
+
+    document.getElementById('assesment').style.display = 'none';
+    document.getElementById('getAssesment').innerText = 'Loading...';
+    let searchedValue = document.getElementById('input1').value;
+    
+    axios.get("/palm/getAssesment?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
+
+        let blob = new Blob([res.data], { type:'application/pdf' });
+        let pdfElement = document.getElementById('assesPdf');
+        pdfElement.href = window.URL.createObjectURL(blob);
+        pdfElement.download = 'Assesment.pdf';
+        document.getElementById('getAssesment').style.display = 'none';
+        document.getElementById('assesment').style.display = 'block';
+
     });
 }
