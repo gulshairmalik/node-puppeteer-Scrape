@@ -115,33 +115,57 @@ const searchTaxBillInPalm = () => {
 
         let arrOfLinks = res.data;
 
-        axios.get("/palm/getTaxBill1?pageAddress="+encodeURIComponent(arrOfLinks[0]),{responseType: 'arraybuffer'}).then((res1) => {
+        axios.get("/palm/getTaxBill1CSV?pageAddress="+encodeURIComponent(arrOfLinks[0]),{responseType: 'arraybuffer'}).then(async (res1) => {
+
+            const pdf1Response = await axios.get("/palm/getTaxBill1PDF",{responseType: 'arraybuffer'});
+            const pdf1Data = await pdf1Response.data;
 
             let blob1 = new Blob([res1.data], { type:'application/csv' });
             let csvElement1 = document.getElementById('csvTax1');
             csvElement1.href = window.URL.createObjectURL(blob1);
             csvElement1.download = 'TaxBill1.csv';
+
+            let blob1a = new Blob([pdf1Data], { type:'application/pdf' });
+            let pdfElement1 = document.getElementById('pdfTax1');
+            pdfElement1.href = window.URL.createObjectURL(blob1a);
+            pdfElement1.download = 'TaxBill1.pdf';
    
 
-            axios.get("/palm/getTaxBill2?pageAddress="+encodeURIComponent(arrOfLinks[1]),{responseType: 'arraybuffer'}).then((res2) => {
+            axios.get("/palm/getTaxBill2CSV?pageAddress="+encodeURIComponent(arrOfLinks[1]),{responseType: 'arraybuffer'}).then(async (res2) => {
+
+                const pdf2Response = await axios.get("/palm/getTaxBill2PDF",{responseType: 'arraybuffer'});
+                const pdf2Data = await pdf2Response.data;
 
                 let blob2 = new Blob([res2.data], { type:'application/csv' });
                 let csvElement2 = document.getElementById('csvTax2');
                 csvElement2.href = window.URL.createObjectURL(blob2);
                 csvElement2.download = 'TaxBill2.csv';
 
-                axios.get("/palm/getTaxBill3?pageAddress="+encodeURIComponent(arrOfLinks[2]),{responseType: 'arraybuffer'}).then((res3) => {
+                let blob2a = new Blob([pdf2Data], { type:'application/PDF' });
+                let pdfElement2 = document.getElementById('pdfTax2');
+                pdfElement2.href = window.URL.createObjectURL(blob2a);
+                pdfElement2.download = 'TaxBill2.pdf';
+
+                axios.get("/palm/getTaxBill3CSV?pageAddress="+encodeURIComponent(arrOfLinks[2]),{responseType: 'arraybuffer'}).then(async (res3) => {
 
                     document.getElementById('get3Tax').style.display = 'none';
                     
+                    const pdf3Response = await axios.get("/palm/getTaxBill3PDF",{responseType: 'arraybuffer'});
+                    const pdf3Data = await pdf3Response.data;
+
+
                     let blob3 = new Blob([res3.data], { type:'application/csv' });
                     let csvElement3 = document.getElementById('csvTax3');
                     csvElement3.href = window.URL.createObjectURL(blob3);
                     csvElement3.download = 'TaxBill3.csv';
 
+                    let blob3a = new Blob([pdf3Data], { type:'application/pdf' });
+                    let pdfElement3 = document.getElementById('pdfTax3');
+                    pdfElement3.href = window.URL.createObjectURL(blob3a);
+                    pdfElement3.download = 'TaxBill3.pdf';
+
                     document.getElementById('taxBill').style.display = 'block';
                     document.getElementById('getAssesment').style.display = 'block';
-                    document.getElementById('assesLabel').style.display = 'block';
       
                 });
                 
@@ -157,16 +181,16 @@ const searchTaxBillInPalm = () => {
 const searchAssesmentInPalm = () => {
 
     document.getElementById('assesment').style.display = 'none';
-    document.getElementById('submit2').innerText = 'Loading...';
-    let searchedValue = document.getElementById('input2').value;
+    document.getElementById('getAssesment').innerText = 'Loading...';
+    let searchedValue = document.getElementById('input1').value;
     
     axios.get("/palm/getAssesment?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
 
-        document.getElementById('submit2').innerText = 'Search';
         let blob = new Blob([res.data], { type:'application/pdf' });
         let pdfElement = document.getElementById('assesPdf');
         pdfElement.href = window.URL.createObjectURL(blob);
         pdfElement.download = 'Assesment.pdf';
+        document.getElementById('getAssesment').style.display = 'none';
         document.getElementById('assesment').style.display = 'block';
 
     });

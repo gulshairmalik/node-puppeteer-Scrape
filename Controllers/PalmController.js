@@ -66,7 +66,26 @@ exports.getTaxBills = (req,res) => {
 
 }
 
-exports.getTaxBill1 = (req,res) => {
+exports.getTaxBill1PDF = (req,res) => {
+
+  res.download('./TaxBill1.pdf');
+
+}
+
+exports.getTaxBill2PDF = (req,res) => {
+
+  res.download('./TaxBill2.pdf');
+
+}
+
+exports.getTaxBill3PDF = (req,res) => {
+
+  res.download('./TaxBill3.pdf');
+
+}
+
+
+exports.getTaxBill1CSV = (req,res) => {
 
   let address = req.query.pageAddress;
 
@@ -80,7 +99,7 @@ exports.getTaxBill1 = (req,res) => {
 
 }
 
-exports.getTaxBill2 = (req,res) => {
+exports.getTaxBill2CSV = (req,res) => {
 
   let address = req.query.pageAddress;
 
@@ -93,7 +112,7 @@ exports.getTaxBill2 = (req,res) => {
 
 }
 
-exports.getTaxBill3 = (req,res) => {
+exports.getTaxBill3CSV = (req,res) => {
 
   let address = req.query.pageAddress;
 
@@ -222,6 +241,7 @@ const printPDF = async (addr) => {
     await page.$eval('#grm-search > tbody > tr:nth-child(2) > td.ui-widget.ui-widget-content.no-vert-lines.c8 > a', el => el.click());
     await page.waitFor(5000);
     const pdf = await page.pdf({format:'A4'});
+    await page.waitForSelector('#dnn_ContentPane');
     const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
     
     await page.waitFor(1000);
@@ -308,6 +328,8 @@ const printPDF = async (addr) => {
   
     await page.goto(pageAddr,{waitUntil: 'networkidle0'});
     await page.waitFor(4000);
+    await page.pdf({path:'TaxBill1.pdf',format:'A4'});
+    await page.waitForSelector('#dnn_ContentPane');
     const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
     await page.waitFor(1000);
     
@@ -341,6 +363,8 @@ const printPDF = async (addr) => {
   
     await page.goto(pageAddr,{waitUntil: 'networkidle0'});
     await page.waitFor(4000);
+    await page.pdf({path:'TaxBill2.pdf',format:'A4'});
+    await page.waitForSelector('#dnn_ContentPane');
     const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
     await page.waitFor(1000);
     
@@ -374,6 +398,8 @@ const printPDF = async (addr) => {
   
     await page.goto(pageAddr,{waitUntil: 'networkidle0'});
     await page.waitFor(4000);
+    await page.pdf({path:'TaxBill3.pdf',format:'A4'});
+    await page.waitForSelector('#dnn_ContentPane');
     const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
     await page.waitFor(1000);
     

@@ -60,22 +60,18 @@ html(lang="en")
                         label Last Three Tax Bills:
                         .row
                             .col-sm-3
-                                a#csvTax1.btn.btn-primary(href="#") Get Bill1 CSV
+                                a#pdfTax1.btn.btn-primary(href="#") Get Bill1 PDF
+                                a#csvTax1.btn.btn-primary(href="#",style="margin-top:10%;") Get Bill1 CSV
                             .col-sm-3
-                                a#csvTax2.btn.btn-primary(href="#") Get Bill2 CSV
+                                a#pdfTax2.btn.btn-primary(href="#") Get Bill2 PDF
+                                a#csvTax2.btn.btn-primary(href="#",style="margin-top:10%;") Get Bill2 CSV
                             .col-sm-3
-                                a#csvTax3.btn.btn-primary(href="#") Get Bill3 CSV
+                                a#pdfTax3.btn.btn-primary(href="#") Get Bill3 PDF
+                                a#csvTax3.btn.btn-primary(href="#",style="margin-top:10%;") Get Bill3 CSV
                     br
-                    //- button#getAssesment.btn.btn-success(onclick="javascript:searchAssesmentInPalm()",style="display:none") Get Special Assesment
-                    label#assesLabel(style="display:none") Special Assesment:
-                    form#getAssesment.form-inline(action='javascript:searchAssesmentInPalm()' name='form1', style="display:none")
-                        .form-group
-                            input#input2.form-control(type='text' placeholder="Search by PCN" required)
-
-                            button#submit2.btn.btn-default(type='submit') Search
-                    span#error2.text-danger
-                    br
+                    button#getAssesment.btn.btn-success(onclick="javascript:searchAssesmentInPalm()",style="display:none") Get Special Assesment
                     #assesment(style="display:none") 
+                        label Special Assesment:
                         .row
                             .col-sm-4
                                 a#assesPdf.btn.btn-primary(href="#") Get Assesment PDF
