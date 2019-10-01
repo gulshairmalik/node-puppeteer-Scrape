@@ -192,7 +192,12 @@ const printPDF = async (addr) => {
   
     let address = addr;
     await page.waitFor(2000);
-    await page.$eval('#selSearchBy', el => el.selectedIndex = 4);
+    if(address.match(/^(\d+-?)+\d+$/)){
+      await page.$eval('#selSearchBy', el => el.selectedIndex = 2);
+    }
+    else{
+      await page.$eval('#selSearchBy', el => el.selectedIndex = 4);
+    }
     await page.focus('#fldInput');
     await page.keyboard.type(address);
 
@@ -249,8 +254,16 @@ const printPDF = async (addr) => {
     await page.goto('https://pbctax.manatron.com/Tabs/PropertyTax.aspx',{waitUntil: 'networkidle0'});
   
     let address = addr;
+
     await page.waitFor(2000);
-    await page.$eval('#selSearchBy', el => el.selectedIndex = 4);
+
+    if(address.match(/^(\d+-?)+\d+$/)){
+      await page.$eval('#selSearchBy', el => el.selectedIndex = 2);
+    }
+    else{
+      await page.$eval('#selSearchBy', el => el.selectedIndex = 4);
+    }
+    
     await page.focus('#fldInput');
     await page.keyboard.type(address);
 
