@@ -141,6 +141,7 @@ const searchTaxBillInPalm = () => {
 
                     document.getElementById('taxBill').style.display = 'block';
                     document.getElementById('getAssesment').style.display = 'block';
+                    document.getElementById('assesLabel').style.display = 'block';
       
                 });
                 
@@ -156,16 +157,16 @@ const searchTaxBillInPalm = () => {
 const searchAssesmentInPalm = () => {
 
     document.getElementById('assesment').style.display = 'none';
-    document.getElementById('getAssesment').innerText = 'Loading...';
-    let searchedValue = document.getElementById('input1').value;
+    document.getElementById('submit2').innerText = 'Loading...';
+    let searchedValue = document.getElementById('input2').value;
     
     axios.get("/palm/getAssesment?address="+searchedValue,{responseType: 'arraybuffer'}).then((res) => {
 
+        document.getElementById('submit2').innerText = 'Search';
         let blob = new Blob([res.data], { type:'application/pdf' });
         let pdfElement = document.getElementById('assesPdf');
         pdfElement.href = window.URL.createObjectURL(blob);
         pdfElement.download = 'Assesment.pdf';
-        document.getElementById('getAssesment').style.display = 'none';
         document.getElementById('assesment').style.display = 'block';
 
     });

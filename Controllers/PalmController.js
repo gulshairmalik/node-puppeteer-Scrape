@@ -399,8 +399,8 @@ const printPDF = async (addr) => {
     await page.waitFor(1000);
     await page.$eval('#MainContent_imgAccept', el => el.click());
     await page.waitFor(1000);
-    await page.waitForSelector('#MainContent_txtSitusAddress');
-    await page.focus('#MainContent_txtSitusAddress');
+    await page.waitForSelector('#MainContent_txtPCN');
+    await page.focus('#MainContent_txtPCN');
     await page.keyboard.type(address);
     await page.waitFor(2000);
   

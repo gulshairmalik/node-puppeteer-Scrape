@@ -66,10 +66,16 @@ html(lang="en")
                             .col-sm-3
                                 a#csvTax3.btn.btn-primary(href="#") Get Bill3 CSV
                     br
-                    button#getAssesment.btn.btn-success(onclick="javascript:searchAssesmentInPalm()",style="display:none") Get Special Assesment
-                
+                    //- button#getAssesment.btn.btn-success(onclick="javascript:searchAssesmentInPalm()",style="display:none") Get Special Assesment
+                    label#assesLabel(style="display:none") Special Assesment:
+                    form#getAssesment.form-inline(action='javascript:searchAssesmentInPalm()' name='form1', style="display:none")
+                        .form-group
+                            input#input2.form-control(type='text' placeholder="Search by PCN" required)
+
+                            button#submit2.btn.btn-default(type='submit') Search
+                    span#error2.text-danger
+                    br
                     #assesment(style="display:none") 
-                        label Special Assesment:
                         .row
                             .col-sm-4
                                 a#assesPdf.btn.btn-primary(href="#") Get Assesment PDF
