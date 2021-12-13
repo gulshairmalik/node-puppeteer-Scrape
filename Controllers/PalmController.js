@@ -167,7 +167,7 @@ const printPDF = async (addr) => {
     });
     const page = await browser.newPage();
   
-    await page.goto('https://www.pbcgov.org/papa/Asps/GeneralAdvSrch/MasterSearch.aspx',{waitUntil: 'networkidle0', timeout: 0});
+    await page.goto('https://www.pbcgov.org/papa/Asps/GeneralAdvSrch/MasterSearch.aspx',{waitUntil: 'networkidle0'});
   
     let address = addr;
     await page.waitFor(2000);
