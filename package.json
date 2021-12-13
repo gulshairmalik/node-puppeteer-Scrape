@@ -20,6 +20,7 @@
     "axios": "^0.19.0",
     "express": "^4.17.1",
     "node-table-to-csv": "^0.1.0",
+    "pdf-merger-js": "^3.2.1",
     "pug": "^2.0.4",
     "puppeteer": "^1.20.0"
   },

@@ -8,7 +8,9 @@ exports.getHome = (req,res) => {
 const removeUnnecessaryFiles = () => {
     
     fs.existsSync('./Page.csv') && fs.unlinkSync('./Page.csv');
+    fs.existsSync('./Page.pdf') && fs.unlinkSync('./Page.pdf');
     fs.existsSync('./Tax.csv') && fs.unlinkSync('./Tax.csv');
+    fs.existsSync('./Tax.pdf') && fs.unlinkSync('./Tax.pdf');
     fs.existsSync('./TaxBill1.csv') && fs.unlinkSync('./TaxBill1.csv');
     fs.existsSync('./TaxBill2.csv') && fs.unlinkSync('./TaxBill2.csv');
     fs.existsSync('./TaxBill3.csv') && fs.unlinkSync('./TaxBill3.csv');
@@ -16,4 +18,5 @@ const removeUnnecessaryFiles = () => {
     fs.existsSync('./TaxBill2.pdf') && fs.unlinkSync('./TaxBill2.pdf');
     fs.existsSync('./TaxBill3.pdf') && fs.unlinkSync('./TaxBill3.pdf');
     fs.existsSync('./Assesment.pdf') && fs.unlinkSync('./Assesment.pdf');
+    fs.existsSync('./CompleteReport.pdf') && fs.unlinkSync('./CompleteReport.pdf');
 } 

@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const tableToCsv = require('node-table-to-csv');
 const axios = require('axios');
 const fs = require('fs');
+const PDFMerger = require('pdf-merger-js');
 
 exports.getPDF = (req,res) => {
 
@@ -139,6 +140,19 @@ exports.getAssesment = (req,res) => {
 
 }
 
+exports.getReportDownload = async (req,res) => {
+  const merger = new PDFMerger();
+  fs.existsSync('./Page.pdf') && merger.add('Page.pdf');  
+  fs.existsSync('./Tax.pdf') && merger.add('Tax.pdf');  
+  fs.existsSync('./TaxBill1.pdf') && merger.add('TaxBill1.pdf');  
+  fs.existsSync('./TaxBill2.pdf') && merger.add('TaxBill2.pdf');  
+  fs.existsSync('./TaxBill3.pdf') && merger.add('TaxBill3.pdf');   
+  fs.existsSync('./Assesment.pdf') && merger.add('Assesment.pdf');   
+
+  await merger.save('CompleteReport.pdf');
+  res.download('./CompleteReport.pdf');
+}
+
 
 
 
@@ -153,7 +167,7 @@ const printPDF = async (addr) => {
     });
     const page = await browser.newPage();
   
-    await page.goto('https://www.pbcgov.org/papa/Asps/GeneralAdvSrch/MasterSearch.aspx',{waitUntil: 'networkidle0'});
+    await page.goto('https://www.pbcgov.org/papa/Asps/GeneralAdvSrch/MasterSearch.aspx',{waitUntil: 'networkidle0', timeout: 0});
   
     let address = addr;
     await page.waitFor(2000);
@@ -178,7 +192,7 @@ const printPDF = async (addr) => {
     }
   
     await page.waitFor(4000);
-    const pdf = await page.pdf({format:'A4'});
+    const pdf = await page.pdf({path:'Page.pdf',format:'A4'});
     const html = await page.$eval('body',el => el.innerHTML);
     
     await page.waitFor(1000);
@@ -240,7 +254,7 @@ const printPDF = async (addr) => {
     await page.waitFor(2000);
     await page.$eval('#grm-search > tbody > tr:nth-child(2) > td.ui-widget.ui-widget-content.no-vert-lines.c8 > a', el => el.click());
     await page.waitFor(5000);
-    const pdf = await page.pdf({format:'A4'});
+    const pdf = await page.pdf({path:'Tax.pdf',format:'A4'});
     await page.waitForSelector('#dnn_ContentPane');
     const html = await page.$eval('#dnn_ContentPane',el => el.innerHTML);
     
@@ -436,7 +450,7 @@ const printPDF = async (addr) => {
 
     let address = addr;
     await page.waitFor(1000);
-    await page.$eval('#MainContent_imgAccept', el => el.click());
+    await page.$eval('#MainContent_btnAccept', el => el.click());
     await page.waitFor(1000);
 
     if(address.match(/^(\d+-?)+\d+$/)){

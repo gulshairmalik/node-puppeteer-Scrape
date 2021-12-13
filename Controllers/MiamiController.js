@@ -38,7 +38,7 @@ const printPDF = async (addr) => {
     });
     const page = await browser.newPage();
   
-    await page.goto('https://www8.miamidade.gov/Apps/PA/propertysearch/#/',{waitUntil: 'networkidle0'});
+    await page.goto('https://www8.miamidade.gov/Apps/PA/propertysearch/#/',{waitUntil: 'networkidle0', timeout: 0});
   
     let address = addr;
     await page.focus('#search_box')

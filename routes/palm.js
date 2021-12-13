@@ -40,5 +40,8 @@ router.get('/getTaxBill3CSV',PalmController.getTaxBill3CSV);
 //Get Request to '/palm/getAssesment'
 router.get('/getAssesment',PalmController.getAssesment);
 
+//Get Request to '/palm/reportDownload'
+router.get('/reportDownload',PalmController.getReportDownload);
+
 //Exporting Router Object to server
 module.exports = router;

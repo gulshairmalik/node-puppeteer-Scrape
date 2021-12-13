@@ -65,6 +65,7 @@ const searchInPalm = () => {
                 document.getElementById('pdf1').style.display = 'block';
                 document.getElementById('csv1').style.display = 'block';
                 document.getElementById('getTax').style.display = 'block';
+                document.getElementById('getTax').click();
             })
         }
     });
@@ -99,6 +100,7 @@ const searchTaxInPalm = () => {
                 csvElement.download = 'Tax.csv';
                 document.getElementById('tax').style.display = 'block';
                 document.getElementById('get3Tax').style.display = 'block';
+                document.getElementById('get3Tax').click();
             })
         }
     });
@@ -166,6 +168,7 @@ const searchTaxBillInPalm = () => {
 
                     document.getElementById('taxBill').style.display = 'block';
                     document.getElementById('getAssesment').style.display = 'block';
+                    document.getElementById('getAssesment').click();
       
                 });
                 
@@ -192,6 +195,23 @@ const searchAssesmentInPalm = () => {
         pdfElement.download = 'Assesment.pdf';
         document.getElementById('getAssesment').style.display = 'none';
         document.getElementById('assesment').style.display = 'block';
+        document.getElementById('getCompleteReport').style.display = 'block';
+        document.getElementById('getCompleteReport').click();
+
+    });
+}
+
+const downloadReport = () => {
+    
+    document.getElementById('getCompleteReport').innerText = 'Loading...';
+    axios.get("/palm/reportDownload",{responseType: 'arraybuffer'}).then((res) => {
+
+        let blob = new Blob([res.data], { type:'application/pdf' });
+        let pdfElement = document.getElementById('reportPDF');
+        pdfElement.href = window.URL.createObjectURL(blob);
+        pdfElement.download = 'CompleteReport.pdf';
+        document.getElementById('getCompleteReport').style.display = 'none';
+        document.getElementById('report').style.display = 'block';
 
     });
 }

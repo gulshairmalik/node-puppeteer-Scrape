@@ -75,6 +75,13 @@ html(lang="en")
                         .row
                             .col-sm-4
                                 a#assesPdf.btn.btn-primary(href="#") Get Assesment PDF
+                    br
+                    button#getCompleteReport.btn.btn-success(onclick="javascript:downloadReport()",style="display:none") Get Special Assesment
+                    #report(style="display:none") 
+                        label Complete PDF Report:
+                        .row
+                            .col-sm-4
+                                a#reportPDF.btn.btn-primary(href="#") Download
                         
                            
         script
